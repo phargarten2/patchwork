@@ -54,7 +54,8 @@ wrap_plots <- function(..., ncol = NULL, nrow = NULL, byrow = NULL,
   } else {
     stop('Can only wrap ggplot and/or grob objects or a list of them', call. = FALSE)
   }
-  if (!all(vapply(plots, is_valid_plot, logical(1)))) stop('Only know how to add ggplots and/or grobs', call. = FALSE)
+  if (!all(vapply(plots, is_valid_plot, logical(1))))
+    stop('Only know how to add ggplots and/or grobs', call. = FALSE)
   if (!is.null(names(plots)) && !is.null(design) && is.character(design)) {
     area_names <- unique(trimws(strsplit(design, '')[[1]]))
     area_names <- sort(setdiff(area_names, c('', '#')))
@@ -74,4 +75,7 @@ wrap_plots <- function(..., ncol = NULL, nrow = NULL, byrow = NULL,
 
 #' @importFrom ggplot2 is.ggplot
 #' @importFrom grid is.grob
-is_valid_plot <- function(x) is.ggplot(x) || is.grob(x)
+is_valid_plot <- function(x){ 
+  if(is.na(x)) ggplot() + theme_void()
+  is.ggplot(x) || is.grob(x)
+ }
